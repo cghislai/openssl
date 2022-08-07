@@ -66,7 +66,7 @@ typedef enum OPTION_choice {
     OPT_EXPORT, OPT_ITER, OPT_NOITER, OPT_MACITER, OPT_NOMACITER, OPT_MACSALTLEN,
     OPT_NOMAC, OPT_LMK, OPT_NODES, OPT_NOENC, OPT_MACALG, OPT_CERTPBE, OPT_KEYPBE,
     OPT_INKEY, OPT_CERTFILE, OPT_UNTRUSTED, OPT_PASSCERTS,
-    OPT_NAME, OPT_CSP, OPT_CANAME,
+    OPT_NAME, OPT_CSP, OPT_CANAME, OPT_ORACLE_TRUST,
     OPT_IN, OPT_OUT, OPT_PASSIN, OPT_PASSOUT, OPT_PASSWORD, OPT_CAPATH,
     OPT_CAFILE, OPT_CASTORE, OPT_NOCAPATH, OPT_NOCAFILE, OPT_NOCASTORE, OPT_ENGINE,
     OPT_R_ENUM, OPT_PROV_ENUM,
@@ -130,9 +130,11 @@ const OPTIONS pkcs12_options[] = {
     {"no-CAstore", OPT_NOCASTORE, '-',
      "Do not load certificates from the default certificates store"},
     {"name", OPT_NAME, 's', "Use name as friendly name"},
+    {"CSP", OPT_CSP, 's', "Microsoft CSP name"},
     {"caname", OPT_CANAME, 's',
      "Use name as CA friendly name (can be repeated)"},
-    {"CSP", OPT_CSP, 's', "Microsoft CSP name"},
+    {"addoractletrust", OPT_ORACLE_TRUST, 's',
+     "Add an Oracle trusted key usage attribute to the exported certificates (compatible with java keytool, default anyExtendedKeyUsage)"},
     {"LMK", OPT_LMK, '-',
      "Add local machine keyset attribute to private key"},
     {"keyex", OPT_KEYEX, '-', "Set key type to MS key exchange"},
@@ -182,6 +184,7 @@ int pkcs12_main(int argc, char **argv)
     BIO *in = NULL, *out = NULL;
     PKCS12 *p12 = NULL;
     STACK_OF(OPENSSL_STRING) *canames = NULL;
+    ASN1_OBJECT *oracletrust = NULL;
     EVP_CIPHER *default_enc = (EVP_CIPHER *)EVP_aes_256_cbc();
     EVP_CIPHER *enc = (EVP_CIPHER *)default_enc;
     OPTION_CHOICE o;
@@ -314,6 +317,13 @@ int pkcs12_main(int argc, char **argv)
                 goto end;
             sk_OPENSSL_STRING_push(canames, opt_arg());
             break;
+        case OPT_ORACLE_TRUST:
+            if (oracletrust == NULL && (oracletrust = sk_ASN1_OBJECT_new_null()) == NULL)
+                goto end;
+            if ((oracletrust = OBJ_txt2obj(opt_arg(), 0)) == NULL) {
+                oracletrust = OBJ_nid2obj(NID_anyExtendedKeyUsage);
+            }
+            break;
         case OPT_IN:
             infile = opt_arg();
             break;
@@ -410,6 +420,8 @@ int pkcs12_main(int argc, char **argv)
             WARN_NO_EXPORT("name");
         if (canames != NULL)
             WARN_NO_EXPORT("caname");
+        if (oracletrust != NULL)
+            WARN_NO_EXPORT("addoracletrust");
         if (csp_name != NULL)
             WARN_NO_EXPORT("CSP");
         if (add_lmk)
@@ -643,6 +655,14 @@ int pkcs12_main(int argc, char **argv)
             X509_alias_set1(sk_X509_value(certs, i), catmp, -1);
         }
 
+        /* Add oracle trust anchor on all ca  */
+        if (oracletrust != NULL ) {
+            for (i = 0; i < sk_X509_num(certs); i++) {
+                // Add a single trust value on every certificate, which will be set on the bag later
+                X509_add1_trust_object(sk_X509_value(certs, i), oracletrust);
+            }
+        }
+
         if (csp_name != NULL && key != NULL)
             EVP_PKEY_add1_attr_by_NID(key, NID_ms_csp_name,
                                       MBSTRING_ASC, (unsigned char *)csp_name,
@@ -709,6 +729,7 @@ int pkcs12_main(int argc, char **argv)
         OSSL_STACK_OF_X509_free(certs);
         OSSL_STACK_OF_X509_free(untrusted_certs);
         X509_free(ee_cert);
+        ASN1_OBJECT_free(oracletrust);
 
         ERR_print_errors(bio_err);
         goto end;
