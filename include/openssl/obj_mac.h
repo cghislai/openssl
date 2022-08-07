@@ -5566,6 +5566,26 @@
 #define LN_aes_256_siv          "aes-256-siv"
 #define NID_aes_256_siv         1200
 
+#define SN_joint_iso_country            "joint-iso-country"
+#define LN_joint_iso_country            "Joint (ITU-T and ISO/IEC) registration within a country"
+#define NID_joint_iso_country           1281
+#define OBJ_joint_iso_country           OBJ_joint_iso_itu_t,16L
+
+#define SN_american_organizations               "american-organizations"
+#define LN_american_organizations               "American organizations"
+#define NID_american_organizations              1282
+#define OBJ_american_organizations              OBJ_joint_iso_country,840L,1L
+
+#define SN_oracle_organization          "oracle-organization"
+#define LN_oracle_organization          "Oracle organization"
+#define NID_oracle_organization         1283
+#define OBJ_oracle_organization         OBJ_american_organizations,113894L
+
+#define SN_oracle_jdk_trustedkeyusage           "oracle-jdk-trustedkeyusage"
+#define LN_oracle_jdk_trustedkeyusage           "Trusted key usage (Oracle)"
+#define NID_oracle_jdk_trustedkeyusage          1284
+#define OBJ_oracle_jdk_trustedkeyusage          OBJ_oracle_organization,746875L,1L,1L
+
 #endif /* OPENSSL_OBJ_MAC_H */
 
 #ifndef OPENSSL_NO_DEPRECATED_3_0

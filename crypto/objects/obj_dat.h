@@ -10,7 +10,7 @@
  */
 
 /* Serialized OID's */
-static const unsigned char so[8316] = {
+static const unsigned char so[8340] = {
     0x2A,0x86,0x48,0x86,0xF7,0x0D,                 /* [    0] OBJ_rsadsi */
     0x2A,0x86,0x48,0x86,0xF7,0x0D,0x01,            /* [    6] OBJ_pkcs */
     0x2A,0x86,0x48,0x86,0xF7,0x0D,0x02,0x02,       /* [   13] OBJ_md2 */
@@ -1148,9 +1148,13 @@ static const unsigned char so[8316] = {
     0x04,0x00,0x81,0x95,0x32,0x01,0x05,            /* [ 8290] OBJ_id_aa_ATSHashIndex_v3 */
     0x04,0x00,0x81,0x95,0x32,0x01,0x06,            /* [ 8297] OBJ_signedAssertion */
     0x2A,0x86,0x48,0x86,0xF7,0x0D,0x01,0x09,0x10,0x02,0x30,  /* [ 8304] OBJ_id_aa_ets_archiveTimestampV2 */
+    0x60,                                          /* [ 8315] OBJ_joint_iso_country */
+    0x60,0x86,0x48,0x01,                           /* [ 8316] OBJ_american_organizations */
+    0x60,0x86,0x48,0x01,0x86,0xF9,0x66,            /* [ 8320] OBJ_oracle_organization */
+    0x60,0x86,0x48,0x01,0x86,0xF9,0x66,0xAD,0xCA,0x7B,0x01,0x01,  /* [ 8327] OBJ_oracle_jdk_trustedkeyusage */
 };
 
-#define NUM_NID 1281
+#define NUM_NID 1285
 static const ASN1_OBJECT nid_objs[NUM_NID] = {
     {"UNDEF", "undefined", NID_undef},
     {"rsadsi", "RSA Data Security, Inc.", NID_rsadsi, 6, &so[0]},
@@ -2433,9 +2437,13 @@ static const ASN1_OBJECT nid_objs[NUM_NID] = {
     {"id-aa-ATSHashIndex-v3", "id-aa-ATSHashIndex-v3", NID_id_aa_ATSHashIndex_v3, 7, &so[8290]},
     {"signedAssertion", "signedAssertion", NID_signedAssertion, 7, &so[8297]},
     {"id-aa-ets-archiveTimestampV2", "id-aa-ets-archiveTimestampV2", NID_id_aa_ets_archiveTimestampV2, 11, &so[8304]},
+    {"joint-iso-country", "Joint (ITU-T and ISO/IEC) registration within a country", NID_joint_iso_country, 1, &so[8315]},
+    {"american-organizations", "American organizations", NID_american_organizations, 4, &so[8316]},
+    {"oracle-organization", "Oracle organization", NID_oracle_organization, 7, &so[8320]},
+    {"oracle-jdk-trustedkeyusage", "Trusted key usage (Oracle)", NID_oracle_jdk_trustedkeyusage, 12, &so[8327]},
 };
 
-#define NUM_SN 1272
+#define NUM_SN 1276
 static const unsigned int sn_objs[NUM_SN] = {
      364,    /* "AD_DVCS" */
      419,    /* "AES-128-CBC" */
@@ -2753,6 +2761,7 @@ static const unsigned int sn_objs[NUM_SN] = {
      446,    /* "account" */
      363,    /* "ad_timestamping" */
      376,    /* "algorithm" */
+    1282,    /* "american-organizations" */
      405,    /* "ansi-X9-62" */
      910,    /* "anyExtendedKeyUsage" */
      746,    /* "anyPolicy" */
@@ -3310,6 +3319,7 @@ static const unsigned int sn_objs[NUM_SN] = {
      770,    /* "issuingDistributionPoint" */
     1264,    /* "itu-t-identified-organization" */
      492,    /* "janetMailbox" */
+    1281,    /* "joint-iso-country" */
      957,    /* "jurisdictionC" */
      955,    /* "jurisdictionL" */
      956,    /* "jurisdictionST" */
@@ -3384,6 +3394,8 @@ static const unsigned int sn_objs[NUM_SN] = {
      139,    /* "nsSGC" */
       77,    /* "nsSslServerName" */
      681,    /* "onBasis" */
+    1284,    /* "oracle-jdk-trustedkeyusage" */
+    1283,    /* "oracle-organization" */
     1089,    /* "organizationIdentifier" */
      491,    /* "organizationalStatus" */
     1141,    /* "oscca" */
@@ -3711,11 +3723,12 @@ static const unsigned int sn_objs[NUM_SN] = {
     1093,    /* "x509ExtAdmission" */
 };
 
-#define NUM_LN 1272
+#define NUM_LN 1276
 static const unsigned int ln_objs[NUM_LN] = {
      363,    /* "AD Time Stamping" */
      405,    /* "ANSI X9.62" */
      368,    /* "Acceptable OCSP Responses" */
+    1282,    /* "American organizations" */
      910,    /* "Any Extended Key Usage" */
      664,    /* "Any language" */
      177,    /* "Authority Information Access" */
@@ -3823,6 +3836,7 @@ static const unsigned int ln_objs[NUM_LN] = {
      665,    /* "Inherit all" */
      647,    /* "International Organizations" */
      142,    /* "Invalidity Date" */
+    1281,    /* "Joint (ITU-T and ISO/IEC) registration within a country" */
      504,    /* "MIME MHS" */
      388,    /* "Mail" */
      383,    /* "Management" */
@@ -3861,6 +3875,7 @@ static const unsigned int ln_objs[NUM_LN] = {
      180,    /* "OCSP Signing" */
     1005,    /* "OGRN" */
     1226,    /* "OGRNIP" */
+    1283,    /* "Oracle organization" */
      161,    /* "PBES2" */
       69,    /* "PBKDF2" */
      162,    /* "PBMAC1" */
@@ -3907,6 +3922,7 @@ static const unsigned int ln_objs[NUM_LN] = {
      129,    /* "TLS Web Server Authentication" */
      133,    /* "Time Stamping" */
      375,    /* "Trust Root" */
+    1284,    /* "Trusted key usage (Oracle)" */
     1034,    /* "X25519" */
     1035,    /* "X448" */
       12,    /* "X509" */
@@ -4987,7 +5003,7 @@ static const unsigned int ln_objs[NUM_LN] = {
      125,    /* "zlib compression" */
 };
 
-#define NUM_OBJ 1143
+#define NUM_OBJ 1147
 static const unsigned int obj_objs[NUM_OBJ] = {
        0,    /* OBJ_undef                        0 */
      181,    /* OBJ_iso                          1 */
@@ -5001,6 +5017,7 @@ static const unsigned int obj_objs[NUM_OBJ] = {
      379,    /* OBJ_org                          1 3 */
      676,    /* OBJ_identified_organization      1 3 */
       11,    /* OBJ_X500                         2 5 */
+    1281,    /* OBJ_joint_iso_country            2 16 */
      647,    /* OBJ_international_organizations  2 23 */
     1265,    /* OBJ_etsi                         0 4 0 */
      380,    /* OBJ_dod                          1 3 6 */
@@ -5126,6 +5143,7 @@ static const unsigned int obj_objs[NUM_OBJ] = {
       95,    /* OBJ_mdc2                         2 5 8 3 101 */
      746,    /* OBJ_any_policy                   2 5 29 32 0 */
      910,    /* OBJ_anyExtendedKeyUsage          2 5 29 37 0 */
+    1282,    /* OBJ_american_organizations       2 16 840 1 */
      519,    /* OBJ_setct_PANData                2 23 42 0 0 */
      520,    /* OBJ_setct_PANToken               2 23 42 0 1 */
      521,    /* OBJ_setct_PANOnly                2 23 42 0 2 */
@@ -5451,6 +5469,7 @@ static const unsigned int obj_objs[NUM_OBJ] = {
      507,    /* OBJ_id_hex_partial_message       1 3 6 1 7 1 1 1 */
      508,    /* OBJ_id_hex_multipart_message     1 3 6 1 7 1 1 2 */
       57,    /* OBJ_netscape                     2 16 840 1 113730 */
+    1283,    /* OBJ_oracle_organization          2 16 840 1 113894 */
      754,    /* OBJ_camellia_128_ecb             0 3 4401 5 3 1 9 1 */
      766,    /* OBJ_camellia_128_ofb128          0 3 4401 5 3 1 9 3 */
      757,    /* OBJ_camellia_128_cfb128          0 3 4401 5 3 1 9 4 */
@@ -6121,6 +6140,7 @@ static const unsigned int obj_objs[NUM_OBJ] = {
      957,    /* OBJ_jurisdictionCountryName      1 3 6 1 4 1 311 60 2 1 3 */
     1056,    /* OBJ_blake2b512                   1 3 6 1 4 1 1722 12 2 1 16 */
     1057,    /* OBJ_blake2s256                   1 3 6 1 4 1 1722 12 2 2 8 */
+    1284,    /* OBJ_oracle_jdk_trustedkeyusage   2 16 840 1 113894 746875 1 1 */
     1159,    /* OBJ_dstu4145be                   1 2 804 2 1 1 1 1 3 1 1 1 1 */
     1160,    /* OBJ_uacurve0                     1 2 804 2 1 1 1 1 3 1 1 2 0 */
     1161,    /* OBJ_uacurve1                     1 2 804 2 1 1 1 1 3 1 1 2 1 */

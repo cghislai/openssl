@@ -14,6 +14,7 @@
 #include <string.h>
 #include "apps.h"
 #include "progs.h"
+#include <openssl/asn1.h>
 #include <openssl/crypto.h>
 #include <openssl/err.h>
 #include <openssl/pem.h>
@@ -1137,7 +1138,6 @@ int cert_load(BIO *in, STACK_OF(X509) *sk)
 void print_attribute(BIO *out, const ASN1_TYPE *av)
 {
     char *value;
-
     switch (av->type) {
     case V_ASN1_BMPSTRING:
         value = OPENSSL_uni2asc(av->value.bmpstring->data,
@@ -1160,6 +1160,17 @@ void print_attribute(BIO *out, const ASN1_TYPE *av)
     case V_ASN1_BIT_STRING:
         hex_prin(out, av->value.bit_string->data,
                  av->value.bit_string->length);
+        BIO_printf(out, "\n");
+        break;
+
+    case V_ASN1_OBJECT:
+        char objbuf[80];
+        const char *ln;
+        ln = OBJ_nid2ln(OBJ_obj2nid(av->value.object));
+        if (!ln)
+            ln = "";
+        OBJ_obj2txt(objbuf, sizeof(objbuf), av->value.object, 1);
+        BIO_printf(out, "%s (%s)", ln, objbuf);
         BIO_printf(out, "\n");
         break;
 
